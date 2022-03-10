@@ -5,15 +5,14 @@ struct CatFact: Decodable {
     let fact: String
 }
 
-private let dispatchGroup = DispatchGroup()
+let dispatchGroup = DispatchGroup()
 
-@available(macOS 12, *)
 struct CatFactLoader {
 
-    private let session = URLSession.shared
-    private let catFactURL = URL(string: "https://catfact.ninja/fact")!
+    private static let session = URLSession.shared
+    private static let catFactURL = URL(string: "https://catfact.ninja/fact")!
 
-    func printCatFact() {
+    static func main() {
         dispatchGroup.enter()
         Task {
             do {
@@ -30,10 +29,7 @@ struct CatFactLoader {
     }
 }
 
-if #available(macOS 12, *) {
-    let factLoader = CatFactLoader()
-    factLoader.printCatFact()
-}
+CatFactLoader.main()
 
 dispatchGroup.notify(queue: DispatchQueue.main) {
     exit(EXIT_SUCCESS)
